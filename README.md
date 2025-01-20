@@ -29,7 +29,7 @@ Este projeto implementa um sistema de gerenciamento hospitalar utilizando a ling
 ## Como Usar
 1. Clone este repositório:
    ```bash
-   git clone https://github.com/seuusuario/hospital-management-system.git
+   git clone https://github.com/wescleyj/hospital-management-system.git
    ```
 2. Entre na pasta do repositório clonado:
    ```bash
