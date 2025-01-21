@@ -41,7 +41,7 @@ Este projeto implementa um sistema de gerenciamento hospitalar utilizando a ling
    ```
 5. Execute o programa:
    ```bash
-   hospital_system
+   ./hospital_system
    ```
 
 ## Estrutura do Código
