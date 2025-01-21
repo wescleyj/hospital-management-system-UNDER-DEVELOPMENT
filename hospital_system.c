@@ -302,25 +302,7 @@ void incluirConsulta(DOCTOR *doctor, PATIENT *patient, SCHEDULED *scheduled)
             printf("Identificação do médico: ");
             scanf(" %s", tempScheduled.dcIdentification);
 
-            // Verifica se o médico existe
-            indicador = 0;
-
-            i = 0;
-            while (doctor[i].dcIdentification[0] != '\0')
-            {
-                if (strcmp(doctor[i].dcIdentification, tempScheduled.dcIdentification) == 0)
-                {
-                    indicador = 1;
-                    break;
-                }
-                i++;
-            }
-
-            if (indicador == 0)
-            {
-                printf("Médico não encontrado\n");
-                printf("Tente novamente\n");
-            }
+            indicador = verificarMedico(doctor, tempScheduled.dcIdentification);
 
         } while (indicador == 0);
 
@@ -329,78 +311,40 @@ void incluirConsulta(DOCTOR *doctor, PATIENT *patient, SCHEDULED *scheduled)
             printf("Identificação do paciente: ");
             scanf(" %s", tempScheduled.paIdentification);
 
-            // Verifica se o paciente existe
-            indicador = 0;
-
-            i = 0;
-
-            while (scheduled[i].paIdentification[0] != '\0')
-            {
-                if (strcmp(tempScheduled.paIdentification, patient[i].paIdentification) == 0)
-                {
-                    indicador = 1;
-                    break;
-                }
-                i++;
-            }
-
-            if (indicador == 0)
-            {
-                printf("Paciente não encontrado\n");
-                printf("Tente novamente\n");
-            }
+            indicador = verificarPaciente(patient, tempScheduled.paIdentification);
 
         } while (indicador == 0);
 
         do
         {
-            indicador = 1;
             printf("Hora da consulta (HH:MM): ");
             scanf("%d:%d", &tempScheduled.hourly.hour, &tempScheduled.hourly.minute);
 
-            if (tempScheduled.hourly.hour < 0 || tempScheduled.hourly.hour > 23 ||
-                tempScheduled.hourly.minute < 0 || tempScheduled.hourly.minute > 59)
-            {
-                printf("Hora inválida\n");
-                printf("Tente novamente\n");
-                indicador = 0;
-            }
+            indicador = validarHorario(tempScheduled.hourly);
+
         } while (indicador == 0);
 
         do
         {
-            indicador = 1;
             printf("Data da consulta (DD/MM/AAAA): ");
             scanf("%d/%d/%d", &tempScheduled.date.day, &tempScheduled.date.month, &tempScheduled.date.year);
 
-            if (tempScheduled.date.day < 1 || tempScheduled.date.day > 31 || tempScheduled.date.month < 1 ||
-                tempScheduled.date.month > 12 || tempScheduled.date.year < 2021)
-            {
-                printf("Data inválida\n");
-                printf("Tente novamente\n");
-                indicador = 0;
-            }
+            indicador = validarData(tempScheduled.date);
 
-            do
-            {
-                indicador = 1;
-                printf("Duração (HH:MM): ");
-                scanf("%d:%d", &tempScheduled.duration.hour, &tempScheduled.duration.minute);
+        } while (indicador == 0);
 
-                if (tempScheduled.hourly.hour < 0 || tempScheduled.hourly.hour > 23 ||
-                    scheduled[lastNum].hourly.minute < 0 || tempScheduled.hourly.minute > 59)
-                {
-                    printf("Hora inválida\n");
-                    printf("Tente novamente\n");
-                    indicador = 0;
-                }
-            } while (indicador == 0);
+        do
+        {
+            printf("Duração (HH:MM): ");
+            scanf("%d:%d", &tempScheduled.duration.hour, &tempScheduled.duration.minute);
+
+            indicador = validarDuracao(tempScheduled.duration);
 
         } while (indicador == 0);
 
         scheduled[lastNum] = tempScheduled;
 
-        lastNum++; // Incrementa para a próxima consulta
+        lastNum++;
     }
 
     if (qtdConsultas > 0)
@@ -438,19 +382,15 @@ void menuPesquisarConsulta(DOCTOR *doctor, PATIENT *patient, SCHEDULED *schedule
         switch (option)
         {
         case 1:
-            // Por médico
             pesquisarConsultaMedico(doctor, scheduled);
             break;
         case 2:
-            // Por paciente
             pesquisarConsultaPaciente(patient, scheduled);
             break;
         case 3:
-            // Por data
             pesquisarConsultaData(scheduled);
             break;
         case 4:
-            // Por horário
             pesquisarConsultaHorario(scheduled);
             break;
         case 5:
@@ -760,25 +700,7 @@ void alterarConsulta(SCHEDULED *scheduled, DOCTOR *doctor, PATIENT *patient)
                     printf("Identificação do médico: ");
                     scanf(" %s", scheduled[i].dcIdentification);
 
-                    // Verifica se o médico existe
-                    validador = 0;
-                    j = 0;
-
-                    while (doctor[j].dcIdentification[0] != '\0')
-                    {
-                        if (strcmp(doctor[j].dcIdentification, scheduled[i].dcIdentification) == 0)
-                        {
-                            validador = 1;
-                            break;
-                        }
-                        j++;
-                    }
-
-                    if (validador == 0)
-                    {
-                        printf("Médico não encontrado\n");
-                        printf("Tente novamente\n");
-                    }
+                    validador = encontrarMedico(doctor, scheduled[i].dcIdentification);
 
                 } while (validador == 0);
 
@@ -789,25 +711,7 @@ void alterarConsulta(SCHEDULED *scheduled, DOCTOR *doctor, PATIENT *patient)
                     printf("Identificação do paciente: ");
                     scanf(" %s", scheduled[i].paIdentification);
 
-                    // Verifica se o paciente existe
-                    validador = 0;
-                    j = 0;
-
-                    while (patient[j].paIdentification[0] != '\0')
-                    {
-                        if (strcmp(patient[j].paIdentification, scheduled[i].paIdentification) == 0)
-                        {
-                            validador = 1;
-                            break;
-                        }
-                        j++;
-                    }
-
-                    if (validador == 0)
-                    {
-                        printf("Paciente não encontrado\n");
-                        printf("Tente novamente\n");
-                    }
+                    validador = encontrarPaciente(patient, scheduled[i].paIdentification);
 
                 } while (validador == 0);
 
@@ -818,22 +722,7 @@ void alterarConsulta(SCHEDULED *scheduled, DOCTOR *doctor, PATIENT *patient)
                     printf("Horário da consulta (HH:MM): ");
                     scanf("%d:%d", &scheduled[i].hourly.hour, &scheduled[i].hourly.minute);
 
-                    // Verifica se o horário é válido
-                    validador = 1;
-
-                    if (scheduled[i].hourly.hour < 0 || scheduled[i].hourly.hour > 23 ||
-                        scheduled[i].hourly.minute < 0 || scheduled[i].hourly.minute > 59)
-                    {
-                        printf("Hora inválida\n");
-                        printf("Tente novamente\n");
-                        validador = 0;
-                    }
-
-                    if (validador == 0)
-                    {
-                        printf("Hora inválida\n");
-                        printf("Tente novamente\n");
-                    }
+                    validador = validarHorario(scheduled[i].hourly);
 
                 } while (validador == 0);
 
@@ -844,22 +733,7 @@ void alterarConsulta(SCHEDULED *scheduled, DOCTOR *doctor, PATIENT *patient)
                     printf("Data da consulta (DD/MM/AAAA): ");
                     scanf("%d/%d/%d", &scheduled[i].date.day, &scheduled[i].date.month, &scheduled[i].date.year);
 
-                    // Verifica se a data é válida
-                    validador = 1;
-
-                    if (scheduled[i].date.day < 1 || scheduled[i].date.day > 31 || scheduled[i].date.month < 1 ||
-                        scheduled[i].date.month > 12 || scheduled[i].date.year < 2021)
-                    {
-                        printf("Data inválida\n");
-                        printf("Tente novamente\n");
-                        validador = 0;
-                    }
-
-                    if (validador == 0)
-                    {
-                        printf("Data inválida\n");
-                        printf("Tente novamente\n");
-                    }
+                    validador = validarData(scheduled[i].date);
 
                 } while (validador == 0);
 
@@ -870,22 +744,7 @@ void alterarConsulta(SCHEDULED *scheduled, DOCTOR *doctor, PATIENT *patient)
                     printf("Duração da consulta (HH:MM): ");
                     scanf("%d:%d", &scheduled[i].duration.hour, &scheduled[i].duration.minute);
 
-                    // Verifica se a duração é válida
-                    validador = 1;
-
-                    if (scheduled[i].duration.hour < 0 || scheduled[i].duration.hour > 23 ||
-                        scheduled[i].duration.minute < 0 || scheduled[i].duration.minute > 59)
-                    {
-                        printf("Duração inválida\n");
-                        printf("Tente novamente\n");
-                        validador = 0;
-                    }
-
-                    if (validador == 0)
-                    {
-                        printf("Duração inválida\n");
-                        printf("Tente novamente\n");
-                    }
+                    validador = validarDuracao(scheduled[i].duration);
 
                 } while (validador == 0);
 
@@ -896,25 +755,7 @@ void alterarConsulta(SCHEDULED *scheduled, DOCTOR *doctor, PATIENT *patient)
                     printf("Identificação do médico: ");
                     scanf(" %s", scheduled[i].dcIdentification);
 
-                    // Verifica se o médico existe
-                    validador = 0;
-                    j = 0;
-
-                    while (doctor[j].dcIdentification[0] != '\0')
-                    {
-                        if (strcmp(doctor[j].dcIdentification, scheduled[i].dcIdentification) == 0)
-                        {
-                            validador = 1;
-                            break;
-                        }
-                        j++;
-                    }
-
-                    if (validador == 0)
-                    {
-                        printf("Médico não encontrado\n");
-                        printf("Tente novamente\n");
-                    }
+                    validador = encontrarMedico(doctor, scheduled[i].dcIdentification);
 
                 } while (validador == 0);
 
@@ -923,25 +764,7 @@ void alterarConsulta(SCHEDULED *scheduled, DOCTOR *doctor, PATIENT *patient)
                     printf("Identificação do paciente: ");
                     scanf(" %s", scheduled[i].paIdentification);
 
-                    // Verifica se o paciente existe
-                    validador = 0;
-                    j = 0;
-
-                    while (patient[j].paIdentification[0] != '\0')
-                    {
-                        if (strcmp(patient[j].paIdentification, scheduled[i].paIdentification) == 0)
-                        {
-                            validador = 1;
-                            break;
-                        }
-                        j++;
-                    }
-
-                    if (validador == 0)
-                    {
-                        printf("Paciente não encontrado\n");
-                        printf("Tente novamente\n");
-                    }
+                    validador = validarPaciente(patient, scheduled[i].paIdentification);
 
                 } while (validador == 0);
 
@@ -950,22 +773,7 @@ void alterarConsulta(SCHEDULED *scheduled, DOCTOR *doctor, PATIENT *patient)
                     printf("Horário da consulta (HH:MM): ");
                     scanf("%d:%d", &scheduled[i].hourly.hour, &scheduled[i].hourly.minute);
 
-                    // Verifica se o horário é válido
-                    validador = 1;
-
-                    if (scheduled[i].hourly.hour < 0 || scheduled[i].hourly.hour > 23 ||
-                        scheduled[i].hourly.minute < 0 || scheduled[i].hourly.minute > 59)
-                    {
-                        printf("Hora inválida\n");
-                        printf("Tente novamente\n");
-                        validador = 0;
-                    }
-
-                    if (validador == 0)
-                    {
-                        printf("Hora inválida\n");
-                        printf("Tente novamente\n");
-                    }
+                    validador = validarHorario(scheduled[i].hourly);
 
                 } while (validador == 0);
 
@@ -974,22 +782,7 @@ void alterarConsulta(SCHEDULED *scheduled, DOCTOR *doctor, PATIENT *patient)
                     printf("Data da consulta (DD/MM/AAAA): ");
                     scanf("%d/%d/%d", &scheduled[i].date.day, &scheduled[i].date.month, &scheduled[i].date.year);
 
-                    // Verifica se a data é válida
-                    validador = 1;
-
-                    if (scheduled[i].date.day < 1 || scheduled[i].date.day > 31 || scheduled[i].date.month < 1 ||
-                        scheduled[i].date.month > 12 || scheduled[i].date.year < 2021)
-                    {
-                        printf("Data inválida\n");
-                        printf("Tente novamente\n");
-                        validador = 0;
-                    }
-
-                    if (validador == 0)
-                    {
-                        printf("Data inválida\n");
-                        printf("Tente novamente\n");
-                    }
+                    validador = validarData(scheduled[i].date);
 
                 } while (validador == 0);
 
@@ -998,22 +791,7 @@ void alterarConsulta(SCHEDULED *scheduled, DOCTOR *doctor, PATIENT *patient)
                     printf("Duração da consulta (HH:MM): ");
                     scanf("%d:%d", &scheduled[i].duration.hour, &scheduled[i].duration.minute);
 
-                    // Verifica se a duração é válida
-                    validador = 1;
-
-                    if (scheduled[i].duration.hour < 0 || scheduled[i].duration.hour > 23 ||
-                        scheduled[i].duration.minute < 0 || scheduled[i].duration.minute > 59)
-                    {
-                        printf("Duração inválida\n");
-                        printf("Tente novamente\n");
-                        validador = 0;
-                    }
-
-                    if (validador == 0)
-                    {
-                        printf("Duração inválida\n");
-                        printf("Tente novamente\n");
-                    }
+                    validador = validarDuracao(scheduled[i].duration);
 
                 } while (validador == 0);
 
@@ -1030,6 +808,68 @@ void alterarConsulta(SCHEDULED *scheduled, DOCTOR *doctor, PATIENT *patient)
             }
         }
     }
+}
+
+// Pesquisar existência de Medico
+int validarMedico(DOCTOR *doctor, const char *id)
+{
+    for (int i = 0; doctor[i].dcIdentification[0] != '\0'; i++)
+    {
+        if (strcmp(doctor[i].dcIdentification, id) == 0)
+            return 1;
+    }
+    printf("Médico não encontrado\n");
+    printf("Tente novamente\n");
+    return 0;
+}
+
+// Pesquisar existência de Paciente
+int validarPaciente(PATIENT *patient, const char *id)
+{
+    for (int i = 0; patient[i].paIdentification[0] != '\0'; i++)
+    {
+        if (strcmp(patient[i].paIdentification, id) == 0)
+            return 1;
+    }
+    printf("Paciente não encontrado\n");
+    printf("Tente novamente\n");
+    return 0;
+}
+
+// Pesquisar data valida
+int validarData(DATA data)
+{
+    if (data.day < 1 || data.day > 31 || data.month < 2 || data.month > 12 || data.year < 2025)
+    {
+        printf("Data inválida\n");
+        printf("Tente novamente\n");
+        return 0;
+    }
+    return 1;
+}
+
+// Pesquisar horário válido
+int validarHorario(HOURLY hourly)
+{
+    if (hourly.hour < 0 || hourly.hour > 23 || hourly.minute < 0 || hourly.minute > 59)
+    {
+        printf("Hora inválida\n");
+        printf("Tente novamente\n");
+        return 0;
+    }
+    return 1;
+}
+
+// Pesquisar duração válida
+int validarDuracao(HOURLY duration)
+{
+    if (duration.hour < 0 || duration.hour > 23 || duration.minute < 0 || duration.minute > 59)
+    {
+        printf("Duração inválida\n");
+        printf("Tente novamente\n");
+        return 0;
+    }
+    return 1;
 }
 
 // Limpar tela
