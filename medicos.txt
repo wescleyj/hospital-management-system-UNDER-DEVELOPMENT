@@ -1,0 +1,10 @@
+DC001 Dr_Carlos Cardiologista
+DC002 Dr_Ana Neurologista
+DC003 Dr_Rafael Pediatra
+DC004 Dr_Mariana Dermatologista
+DC005 Dr_Fernando Ortopedista
+DC006 Dr_Luiza Psiquiatra
+DC007 Dr_Roberto Cirurgião
+DC008 Dr_Paula Ginecologista
+DC009 Dr_Marcelo Oftalmologista
+DC010 Dr_Camila Endocrinologista
