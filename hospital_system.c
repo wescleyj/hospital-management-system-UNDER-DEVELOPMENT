@@ -80,6 +80,7 @@ int validarData(DATA data);
 int validarHorario(HOURLY hourly);
 int validarDuracao(HOURLY duration);
 void imprimirConsulta(SCHEDULED *scheduled, int i);
+void pause();
 
 // Função principal
 int main(void)
@@ -92,21 +93,21 @@ int main(void)
 
     FILE *fileDoctor, *filePatient, *fileScheduled;
 
-    fileDoctor = fopen("medicos.txt", "r");
-    filePatient = fopen("pacientes.txt", "r");
-    fileScheduled = fopen("consultas.txt", "r");
+    fileDoctor = fopen("medicos.txt", "r+");
+    filePatient = fopen("pacientes.txt", "r+");
+    fileScheduled = fopen("consultas.txt", "r+");
 
     if (fileDoctor == NULL || filePatient == NULL || fileScheduled == NULL)
     {
         printf("Erro ao abrir o arquivo\n");
-        system("pause");
+        pause();
         return 1;
     }
 
     if (doctor == NULL || patient == NULL || scheduled == NULL)
     {
         printf("Erro ao alocar memória\n");
-        system("pause");
+        pause();
         return 1;
     }
 
@@ -192,7 +193,7 @@ void menu(DOCTOR *doctor, PATIENT *patient, SCHEDULED *scheduled)
             break;
         default:
             printf("Opção inválida\n");
-            system("pause");
+            pause();
             break;
         }
     } while (option != 5);
@@ -239,7 +240,7 @@ void opcoesConsulta(DOCTOR *doctor, PATIENT *patient, SCHEDULED *scheduled)
             break;
         default:
             printf("Opção inválida\n");
-            system("pause");
+            pause();
             break;
         }
 
@@ -308,7 +309,7 @@ void incluirConsulta(DOCTOR *doctor, PATIENT *patient, SCHEDULED *scheduled)
             printf("Identificação do médico: ");
             scanf(" %s", tempScheduled.dcIdentification);
 
-            indicador = verificarMedico(doctor, tempScheduled.dcIdentification);
+            indicador = validarMedico(doctor, tempScheduled.dcIdentification);
 
         } while (indicador == 0);
 
@@ -317,7 +318,7 @@ void incluirConsulta(DOCTOR *doctor, PATIENT *patient, SCHEDULED *scheduled)
             printf("Identificação do paciente: ");
             scanf(" %s", tempScheduled.paIdentification);
 
-            indicador = verificarPaciente(patient, tempScheduled.paIdentification);
+            indicador = validarPaciente(patient, tempScheduled.paIdentification);
 
         } while (indicador == 0);
 
@@ -366,7 +367,7 @@ void incluirConsulta(DOCTOR *doctor, PATIENT *patient, SCHEDULED *scheduled)
     loading();
     getchar();
 
-    system("pause");
+    pause();
 }
 
 // Pesquisar consulta
@@ -405,7 +406,7 @@ void menuPesquisarConsulta(DOCTOR *doctor, PATIENT *patient, SCHEDULED *schedule
             break;
         default:
             printf("Opção inválida\n");
-            system("pause");
+            pause();
             break;
         }
 
@@ -439,7 +440,7 @@ void pesquisarConsultaMedico(DOCTOR *doctor, SCHEDULED *scheduled)
         printf("Nenhuma consulta encontrada\n");
     }
 
-    system("pause");
+    pause();
 }
 
 // Pesquisar consulta por paciente
@@ -469,7 +470,7 @@ void pesquisarConsultaPaciente(PATIENT *patient, SCHEDULED *scheduled)
         printf("Nenhuma consulta encontrada\n");
     }
 
-    system("pause");
+    pause();
 }
 
 // Pesquisar consulta por data
@@ -499,7 +500,7 @@ void pesquisarConsultaData(SCHEDULED *scheduled)
         printf("Nenhuma consulta encontrada\n");
     }
 
-    system("pause");
+    pause();
 }
 
 // Pesquisar consulta por horário
@@ -528,7 +529,7 @@ void pesquisarConsultaHorario(SCHEDULED *scheduled)
         printf("Nenhuma consulta encontrada\n");
     }
 
-    system("pause");
+    pause();
 }
 
 // Cancelar consulta
@@ -584,7 +585,7 @@ void cancelarConsulta(SCHEDULED *scheduled)
                 }
 
                 printf("Consulta cancelada com sucesso!\n");
-                system("pause");
+                pause();
                 break;
             }
         }
@@ -663,7 +664,7 @@ void alterarConsulta(SCHEDULED *scheduled, DOCTOR *doctor, PATIENT *patient)
                     printf("Identificação do médico: ");
                     scanf(" %s", scheduled[i].dcIdentification);
 
-                    validador = encontrarMedico(doctor, scheduled[i].dcIdentification);
+                    validador = validarMedico(doctor, scheduled[i].dcIdentification);
 
                 } while (validador == 0);
 
@@ -674,7 +675,7 @@ void alterarConsulta(SCHEDULED *scheduled, DOCTOR *doctor, PATIENT *patient)
                     printf("Identificação do paciente: ");
                     scanf(" %s", scheduled[i].paIdentification);
 
-                    validador = encontrarPaciente(patient, scheduled[i].paIdentification);
+                    validador = validarPaciente(patient, scheduled[i].paIdentification);
 
                 } while (validador == 0);
 
@@ -718,7 +719,7 @@ void alterarConsulta(SCHEDULED *scheduled, DOCTOR *doctor, PATIENT *patient)
                     printf("Identificação do médico: ");
                     scanf(" %s", scheduled[i].dcIdentification);
 
-                    validador = encontrarMedico(doctor, scheduled[i].dcIdentification);
+                    validador = validarMedico(doctor, scheduled[i].dcIdentification);
 
                 } while (validador == 0);
 
@@ -760,7 +761,7 @@ void alterarConsulta(SCHEDULED *scheduled, DOCTOR *doctor, PATIENT *patient)
 
                 getchar();
                 printf("Consulta alterada com sucesso!\n");
-                system("pause");
+                pause();
                 return;
 
             default:
@@ -882,7 +883,7 @@ void save(DOCTOR *doctor, PATIENT *patient, SCHEDULED *scheduled)
     if (fileDoctor == NULL || filePatient == NULL || fileScheduled == NULL)
     {
         printf("Erro ao abrir o arquivo\n");
-        system("pause");
+        pause();
         return;
     }
 
@@ -919,4 +920,10 @@ void save(DOCTOR *doctor, PATIENT *patient, SCHEDULED *scheduled)
     fclose(fileDoctor);
     fclose(filePatient);
     fclose(fileScheduled);
+}
+
+void pause()
+{
+    printf("Pressione qualquer tecla para continuar...");
+    getchar();
 }
