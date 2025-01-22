@@ -74,15 +74,21 @@ void pesquisarConsultaHorario(SCHEDULED *scheduled);
 void cancelarConsulta(SCHEDULED *scheduled);
 void alterarConsulta(SCHEDULED *scheduled, DOCTOR *doctor, PATIENT *patient);
 void save(DOCTOR *doctor, PATIENT *patient, SCHEDULED *scheduled);
+int validarMedico(DOCTOR *doctor, const char *id);
+int validarPaciente(PATIENT *patient, const char *id);
+int validarData(DATA data);
+int validarHorario(HOURLY hourly);
+int validarDuracao(HOURLY duration);
+void imprimirConsulta(SCHEDULED *scheduled, int i);
 
 // Função principal
 int main(void)
 {
     setlocale(LC_ALL, NULL);
 
-    DOCTOR *doctor = malloc(20 * sizeof(DOCTOR));
-    PATIENT *patient = malloc(50 * sizeof(PATIENT));
-    SCHEDULED *scheduled = malloc(100 * sizeof(SCHEDULED));
+    DOCTOR *doctor = calloc(20, sizeof(DOCTOR));
+    PATIENT *patient = calloc(50, sizeof(PATIENT));
+    SCHEDULED *scheduled = calloc(100, sizeof(SCHEDULED));
 
     FILE *fileDoctor, *filePatient, *fileScheduled;
 
@@ -422,13 +428,7 @@ void pesquisarConsultaMedico(DOCTOR *doctor, SCHEDULED *scheduled)
     {
         if (strcmp(scheduled[i].dcIdentification, tempDoctor.dcIdentification) == 0)
         {
-            printf("Consulta %d\n", scheduled[i].num);
-            printf("Médico: %s\n", scheduled[i].dcIdentification);
-            printf("Paciente: %s\n", scheduled[i].paIdentification);
-            printf("Horário: %02d:%02d\n", scheduled[i].hourly.hour, scheduled[i].hourly.minute);
-            printf("Data: %02d/%02d/%04d\n", scheduled[i].date.day, scheduled[i].date.month, scheduled[i].date.year);
-            printf("Duracao: %02d:%02d\n", scheduled[i].duration.hour, scheduled[i].duration.minute);
-            printf("\n");
+            imprimirConsulta(scheduled, i);
             indicador = 1;
         }
         i++;
@@ -458,13 +458,7 @@ void pesquisarConsultaPaciente(PATIENT *patient, SCHEDULED *scheduled)
     {
         if (strcmp(scheduled[i].paIdentification, tempPatient.paIdentification) == 0)
         {
-            printf("Consulta %d\n", scheduled[i].num);
-            printf("Médico: %s\n", scheduled[i].dcIdentification);
-            printf("Paciente: %s\n", scheduled[i].paIdentification);
-            printf("Horário: %02d:%02d\n", scheduled[i].hourly.hour, scheduled[i].hourly.minute);
-            printf("Data: %02d/%02d/%04d\n", scheduled[i].date.day, scheduled[i].date.month, scheduled[i].date.year);
-            printf("Duracao: %02d:%02d\n", scheduled[i].duration.hour, scheduled[i].duration.minute);
-            printf("\n");
+            imprimirConsulta(scheduled, i);
             indicador = 1;
         }
         i++;
@@ -494,13 +488,7 @@ void pesquisarConsultaData(SCHEDULED *scheduled)
     {
         if (scheduled[i].date.day == tempData.day && scheduled[i].date.month == tempData.month && scheduled[i].date.year == tempData.year)
         {
-            printf("Consulta %d\n", scheduled[i].num);
-            printf("Médico: %s\n", scheduled[i].dcIdentification);
-            printf("Paciente: %s\n", scheduled[i].paIdentification);
-            printf("Horário: %02d:%02d\n", scheduled[i].hourly.hour, scheduled[i].hourly.minute);
-            printf("Data: %02d/%02d/%04d\n", scheduled[i].date.day, scheduled[i].date.month, scheduled[i].date.year);
-            printf("Duracao: %02d:%02d\n", scheduled[i].duration.hour, scheduled[i].duration.minute);
-            printf("\n");
+            imprimirConsulta(scheduled, i);
             indicador = 1;
         }
         i++;
@@ -529,13 +517,7 @@ void pesquisarConsultaHorario(SCHEDULED *scheduled)
     {
         if (scheduled[i].hourly.hour == tempHourly.hour && scheduled[i].hourly.minute == tempHourly.minute)
         {
-            printf("Consulta %d\n", scheduled[i].num);
-            printf("Médico: %s\n", scheduled[i].dcIdentification);
-            printf("Paciente: %s\n", scheduled[i].paIdentification);
-            printf("Horário: %02d:%02d\n", scheduled[i].hourly.hour, scheduled[i].hourly.minute);
-            printf("Data: %02d/%02d/%04d\n", scheduled[i].date.day, scheduled[i].date.month, scheduled[i].date.year);
-            printf("Duracao: %02d:%02d\n", scheduled[i].duration.hour, scheduled[i].duration.minute);
-            printf("\n");
+            imprimirConsulta(scheduled, i);
             indicador = 1;
         }
         i++;
@@ -576,14 +558,7 @@ void cancelarConsulta(SCHEDULED *scheduled)
     {
         if (scheduled[i].num == num)
         {
-            printf("\nConsulta %d\n", scheduled[i].num);
-            printf("Médico: %s\n", scheduled[i].dcIdentification);
-            printf("Paciente: %s\n", scheduled[i].paIdentification);
-            printf("Horário: %02d:%02d\n", scheduled[i].hourly.hour, scheduled[i].hourly.minute);
-            printf("Data: %02d/%02d/%04d\n", scheduled[i].date.day, scheduled[i].date.month, scheduled[i].date.year);
-            printf("Duração: %02d:%02d\n", scheduled[i].duration.hour, scheduled[i].duration.minute);
-            printf("\n");
-
+            imprimirConsulta(scheduled, i);
             printf("Deseja cancelar a consulta? (1 - Sim, 2 - Não): ");
             scanf("%d", &indicador);
 
@@ -640,13 +615,7 @@ void alterarConsulta(SCHEDULED *scheduled, DOCTOR *doctor, PATIENT *patient)
         {
             if (scheduled[i].num != 0)
             {
-                printf("Consulta %d\n", scheduled[i].num);
-                printf("Médico: %s\n", scheduled[i].dcIdentification);
-                printf("Paciente: %s\n", scheduled[i].paIdentification);
-                printf("Horário: %02d:%02d\n", scheduled[i].hourly.hour, scheduled[i].hourly.minute);
-                printf("Data: %02d/%02d/%04d\n", scheduled[i].date.day, scheduled[i].date.month, scheduled[i].date.year);
-                printf("Duração: %02d:%02d\n", scheduled[i].duration.hour, scheduled[i].duration.minute);
-                printf("\n");
+                imprimirConsulta(scheduled, i);
             }
         }
     }
@@ -665,13 +634,7 @@ void alterarConsulta(SCHEDULED *scheduled, DOCTOR *doctor, PATIENT *patient)
     {
         if (scheduled[i].num == num)
         {
-            printf("Consulta %d\n", scheduled[i].num);
-            printf("Médico: %s\n", scheduled[i].dcIdentification);
-            printf("Paciente: %s\n", scheduled[i].paIdentification);
-            printf("Horário: %02d:%02d\n", scheduled[i].hourly.hour, scheduled[i].hourly.minute);
-            printf("Data: %02d/%02d/%04d\n", scheduled[i].date.day, scheduled[i].date.month, scheduled[i].date.year);
-            printf("Duração: %02d:%02d\n", scheduled[i].duration.hour, scheduled[i].duration.minute);
-            printf("\n");
+            imprimirConsulta(scheduled, i);
 
             printf("Deseja alterar a consulta? (1 - Sim, 2 - Não): ");
             scanf("%d", &choice);
@@ -839,7 +802,7 @@ int validarPaciente(PATIENT *patient, const char *id)
 // Pesquisar data valida
 int validarData(DATA data)
 {
-    if (data.day < 1 || data.day > 31 || data.month < 2 || data.month > 12 || data.year < 2025)
+    if (data.day < 1 || data.day > 31 || data.month < 1 || data.month > 12 || data.year < 2025)
     {
         printf("Data inválida\n");
         printf("Tente novamente\n");
@@ -870,6 +833,18 @@ int validarDuracao(HOURLY duration)
         return 0;
     }
     return 1;
+}
+
+// Imprimir consulta
+void imprimirConsulta(SCHEDULED *scheduled, int i)
+{
+    printf("Consulta %d\n", scheduled[i].num);
+    printf("Médico: %s\n", scheduled[i].dcIdentification);
+    printf("Paciente: %s\n", scheduled[i].paIdentification);
+    printf("Horário: %02d:%02d\n", scheduled[i].hourly.hour, scheduled[i].hourly.minute);
+    printf("Data: %02d/%02d/%04d\n", scheduled[i].date.day, scheduled[i].date.month, scheduled[i].date.year);
+    printf("Duração: %02d:%02d\n", scheduled[i].duration.hour, scheduled[i].duration.minute);
+    printf("\n");
 }
 
 // Limpar tela
@@ -936,6 +911,10 @@ void save(DOCTOR *doctor, PATIENT *patient, SCHEDULED *scheduled)
                 scheduled[i].date.month, scheduled[i].date.year, scheduled[i].duration.hour, scheduled[i].duration.minute);
         i++;
     }
+
+    free(doctor);
+    free(patient);
+    free(scheduled);
 
     fclose(fileDoctor);
     fclose(filePatient);
