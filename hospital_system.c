@@ -80,6 +80,7 @@ int validarHorario(HOURLY hourly);
 int validarDuracao(HOURLY duration);
 void imprimirConsulta(SCHEDULED *scheduled, int i);
 void pause();
+int validarConsulta(SCHEDULED *scheduled, int num);
 
 // Função principal
 int main(void)
@@ -118,8 +119,9 @@ int main(void)
 
     menu(doctor, patient, scheduled);
 
-    // Salvar arquivos
-    save(doctor, patient, scheduled);
+    free(doctor);
+    free(patient);
+    free(scheduled);
 
     return 0;
 }
@@ -161,6 +163,8 @@ void menu(DOCTOR *doctor, PATIENT *patient, SCHEDULED *scheduled)
 
     do
     {
+        save(doctor, patient, scheduled);
+
         clear();
 
         printf("1 - Consulta\n");
@@ -194,6 +198,7 @@ void menu(DOCTOR *doctor, PATIENT *patient, SCHEDULED *scheduled)
             pause();
             break;
         }
+
     } while (option != 5);
 }
 
@@ -204,6 +209,8 @@ void opcoesConsulta(DOCTOR *doctor, PATIENT *patient, SCHEDULED *scheduled)
 
     do
     {
+        save(doctor, patient, scheduled);
+
         clear();
 
         printf("1 - Incluir consulta\n");
@@ -359,9 +366,7 @@ void incluirConsulta(DOCTOR *doctor, PATIENT *patient, SCHEDULED *scheduled)
         printf("Nenhuma consulta incluída.\n");
     }
 
-    printf("Retornando ao menu...");
     getchar();
-
     pause();
 }
 
@@ -403,6 +408,8 @@ void menuPesquisarConsulta(DOCTOR *doctor, PATIENT *patient, SCHEDULED *schedule
             pause();
             break;
         }
+
+        save(doctor, patient, scheduled);
 
     } while (option != 5);
 }
@@ -575,7 +582,7 @@ void cancelarConsulta(SCHEDULED *scheduled)
 {
     clear();
 
-    int num, indicador = 0, i = 0, found = 0, totalConsultas = 0;
+    int num, indicador = 0, i = 0, found = 0, totalConsultas = 0, validador = 0;
 
     // Determinar o total de consultas cadastradas
     while (scheduled[totalConsultas].num != 0)
@@ -586,11 +593,23 @@ void cancelarConsulta(SCHEDULED *scheduled)
     if (totalConsultas == 0)
     {
         printf("Nenhuma consulta cadastrada.\n");
+        getchar();
+        pause();
         return;
     }
 
     printf("Número da consulta: ");
     scanf("%d", &num);
+
+    validador = validarConsulta(scheduled, num);
+
+    if (validador == 0)
+    {
+        printf("Consulta não encontrada.\n");
+        getchar();
+        pause();
+        return;
+    }
 
     // Buscar a consulta pelo número
     for (i = 0; i < totalConsultas; i++)
@@ -870,6 +889,17 @@ int validarDuracao(HOURLY duration)
     return 1;
 }
 
+// Validar consulta
+int validarConsulta(SCHEDULED *scheduled, int num)
+{
+    for (int i = 0; scheduled[i].num != 0; i++)
+    {
+        if (scheduled[i].num == num)
+            return 1;
+    }
+    return 0;
+}
+
 // Imprimir consulta
 void imprimirConsulta(SCHEDULED *scheduled, int i)
 {
@@ -935,10 +965,6 @@ void save(DOCTOR *doctor, PATIENT *patient, SCHEDULED *scheduled)
                 scheduled[i].date.month, scheduled[i].date.year, scheduled[i].duration.hour, scheduled[i].duration.minute);
         i++;
     }
-
-    free(doctor);
-    free(patient);
-    free(scheduled);
 
     fclose(fileDoctor);
     fclose(filePatient);
