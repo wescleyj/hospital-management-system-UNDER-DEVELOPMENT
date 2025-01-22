@@ -64,7 +64,6 @@ void lerarquivos(FILE *fileDoctor, FILE *filePatient, FILE *fileScheduled, DOCTO
 void clear();
 void menu(DOCTOR *doctor, PATIENT *patient, SCHEDULED *scheduled);
 void opcoesConsulta(DOCTOR *doctor, PATIENT *patient, SCHEDULED *scheduled);
-void loading();
 void incluirConsulta(DOCTOR *doctor, PATIENT *patient, SCHEDULED *scheduled);
 void menuPesquisarConsulta(DOCTOR *doctor, PATIENT *patient, SCHEDULED *scheduled);
 void pesquisarConsultaMedico(DOCTOR *doctor, SCHEDULED *scheduled);
@@ -189,7 +188,6 @@ void menu(DOCTOR *doctor, PATIENT *patient, SCHEDULED *scheduled)
             break;
         case 5:
             printf("Saindo");
-            loading();
             break;
         default:
             printf("Opção inválida\n");
@@ -236,7 +234,6 @@ void opcoesConsulta(DOCTOR *doctor, PATIENT *patient, SCHEDULED *scheduled)
             break;
         case 5:
             printf("Voltando");
-            loading();
             break;
         default:
             printf("Opção inválida\n");
@@ -270,7 +267,6 @@ void incluirConsulta(DOCTOR *doctor, PATIENT *patient, SCHEDULED *scheduled)
     {
         printf("Número máximo de consultas atingido\n");
         printf("Retornando ao menu");
-        loading();
         return;
     }
 
@@ -364,7 +360,6 @@ void incluirConsulta(DOCTOR *doctor, PATIENT *patient, SCHEDULED *scheduled)
     }
 
     printf("Retornando ao menu...");
-    loading();
     getchar();
 
     pause();
@@ -402,7 +397,6 @@ void menuPesquisarConsulta(DOCTOR *doctor, PATIENT *patient, SCHEDULED *schedule
             break;
         case 5:
             printf("Voltando");
-            loading();
             break;
         default:
             printf("Opção inválida\n");
@@ -595,7 +589,6 @@ void cancelarConsulta(SCHEDULED *scheduled)
     {
         printf("Consulta não encontrada.\n");
         printf("Retornando ao menu");
-        loading();
     }
 }
 
@@ -627,7 +620,6 @@ void alterarConsulta(SCHEDULED *scheduled, DOCTOR *doctor, PATIENT *patient)
     if (num == 0)
     {
         printf("Retornando ao menu");
-        loading();
         return;
     }
 
@@ -643,7 +635,6 @@ void alterarConsulta(SCHEDULED *scheduled, DOCTOR *doctor, PATIENT *patient)
             if (choice == 2)
             {
                 printf("Retornando ao menu");
-                loading();
                 return;
             }
 
@@ -767,7 +758,6 @@ void alterarConsulta(SCHEDULED *scheduled, DOCTOR *doctor, PATIENT *patient)
             default:
                 printf("Opção inválida\n");
                 printf("Tente novamente\n");
-                loading();
                 break;
             }
         }
@@ -858,17 +848,6 @@ void clear()
 #endif
 }
 
-// Efeito carregamento
-void loading()
-{
-    for (int i = 0; i < 3; i++)
-    {
-        printf(".");
-        Sleep(500);
-    }
-    printf("\n");
-}
-
 // Salvar arquivos
 void save(DOCTOR *doctor, PATIENT *patient, SCHEDULED *scheduled)
 {
@@ -922,6 +901,7 @@ void save(DOCTOR *doctor, PATIENT *patient, SCHEDULED *scheduled)
     fclose(fileScheduled);
 }
 
+// Pausar
 void pause()
 {
     printf("Pressione qualquer tecla para continuar...");
