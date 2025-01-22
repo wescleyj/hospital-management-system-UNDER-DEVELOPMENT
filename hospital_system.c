@@ -8,7 +8,7 @@ Giovanni Estevam dos Santos
 #include <stdio.h>
 #include <stdlib.h>
 #include <locale.h>
-#include <Windows.h>
+#include <string.h>
 
 // Structs
 typedef struct
