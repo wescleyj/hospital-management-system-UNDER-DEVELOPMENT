@@ -419,6 +419,17 @@ void pesquisarConsultaMedico(DOCTOR *doctor, SCHEDULED *scheduled)
     printf("Identificação do médico: ");
     scanf("%s", tempDoctor.dcIdentification);
 
+    indicador = validarMedico(doctor, tempDoctor.dcIdentification);
+
+    if (indicador == 0)
+    {
+        getchar();
+        pause();
+        return;
+    }
+    
+    indicador = 0;
+
     while (scheduled[i].num != 0)
     {
         if (strcmp(scheduled[i].dcIdentification, tempDoctor.dcIdentification) == 0)
@@ -434,6 +445,7 @@ void pesquisarConsultaMedico(DOCTOR *doctor, SCHEDULED *scheduled)
         printf("Nenhuma consulta encontrada\n");
     }
 
+    getchar();
     pause();
 }
 
@@ -448,6 +460,17 @@ void pesquisarConsultaPaciente(PATIENT *patient, SCHEDULED *scheduled)
 
     printf("Identificação do paciente: ");
     scanf("%s", tempPatient.paIdentification);
+
+    indicador = validarPaciente(patient, tempPatient.paIdentification);
+
+    if (indicador == 0)
+    {
+        getchar();
+        pause();
+        return;
+    }
+
+    indicador = 0;
 
     while (scheduled[i].num != 0)
     {
@@ -464,6 +487,7 @@ void pesquisarConsultaPaciente(PATIENT *patient, SCHEDULED *scheduled)
         printf("Nenhuma consulta encontrada\n");
     }
 
+    getchar();
     pause();
 }
 
@@ -478,6 +502,16 @@ void pesquisarConsultaData(SCHEDULED *scheduled)
 
     printf("Data da consulta (DD/MM/AAAA): ");
     scanf("%d/%d/%d", &tempData.day, &tempData.month, &tempData.year);
+
+    indicador = validarData(tempData);
+
+    if (indicador == 0)
+    {
+        pause();
+        return;
+    }
+
+    indicador = 0;
 
     while (scheduled[i].num != 0)
     {
@@ -507,6 +541,16 @@ void pesquisarConsultaHorario(SCHEDULED *scheduled)
 
     printf("Horário da consulta (HH:MM): ");
     scanf("%d:%d", &tempHourly.hour, &tempHourly.minute);
+
+    indicador = validarHorario(tempHourly);
+
+    if (indicador == 0)
+    {
+        pause();
+        return;
+    }
+
+    indicador = 0;
 
     while (scheduled[i].num != 0)
     {
