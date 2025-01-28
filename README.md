@@ -73,4 +73,3 @@ Contributions are welcome! Feel free to open issues or pull requests with improv
 
 ## License
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
->>>>>>> 97d322fb335b8b3799a61ecd26421cff22413d6b
