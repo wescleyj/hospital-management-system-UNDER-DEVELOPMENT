@@ -856,7 +856,7 @@ int validarPaciente(PATIENT *patient, const char *id)
 // Pesquisar data valida
 int validarData(DATA data)
 {
-    if (data.day < 1 || data.day > 31 || data.month < 1 || data.month > 12 || data.year < 2025)
+    if (data.day < 1 || data.day >= 31 || data.month < 1 || data.month > 12 || data.year < 2025)
     {
         printf("Data inválida\n");
         printf("Tente novamente\n");
